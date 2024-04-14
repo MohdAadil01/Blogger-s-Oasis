@@ -4,9 +4,21 @@ import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 
 export default function Home() {
+  const [posts, setPosts] = useState([]);
+
+  const fetchPostFromDatabase = async () => {
+    const response = await fetch("http://localhost:8888/api/post/getallposts");
+    const data = await response.json();
+    setPosts(data.foundPosts);
+  };
+
+  useEffect(() => {
+    fetchPostFromDatabase();
+  }, []);
+
   return (
     <div>
-      <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto ">
+      <div className="flex flex-col gap-6 p-28  px-14 max-w-6xl mx-auto ">
         <h1 className="text-3xl font-bold lg:text-6xl font-['Montserrat']">
           Join Us at Blogger's Oasis:
           <br />
@@ -27,8 +39,28 @@ export default function Home() {
       {/* <div className="p-3 bg-amber-100 dark:bg-slate-700">
         <CallToAction />
       </div> */}
-
-      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7"></div>
+      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7">
+        {posts && posts.length > 0 ? (
+          <div className="flex flex-col gap-6">
+            <h2 className="text-2xl font-semibold text-center">Recent Posts</h2>
+            <div className="flex flex-wrap gap-4">
+              {posts.map((post) => (
+                <PostCard key={post._id} post={post} />
+              ))}
+            </div>
+            <Link
+              to={"/search"}
+              className="text-lg text-teal-500 hover:underline text-center"
+            >
+              View all posts
+            </Link>
+          </div>
+        ) : (
+          <p className="text-gray-400 text-xs sm:text-sm font-['Roboto'] text-center">
+            No Post here
+          </p>
+        )}
+      </div>
     </div>
   );
 }
