@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import BackgroundImage from "/assets/images/bg-star.jpeg";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -17,7 +18,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <div style={{ backgroundImage: `url(${BackgroundImage})` }}>
       <div className="flex flex-col gap-6 p-28  px-14 max-w-6xl mx-auto ">
         <h1 className="text-3xl font-bold lg:text-6xl font-['Montserrat']">
           Join Us at Blogger's Oasis:
