@@ -28,15 +28,13 @@ function SignUp() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       dispatch(signin(data.rest));
       setIsLoading(false);
       if (res.ok) {
         navigate("/");
       }
-      console.log(res);
-      if (!req.ok) {
-        setErrorMessage(res.errors);
+      {
+        setErrorMessage(data.error);
       }
     } catch (error) {
       setErrorMessage(error.message);

@@ -26,17 +26,17 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (res.ok) {
         setIsLoading(false);
         dispatch(signin(data.rest));
         navigate("/");
-      }
-      if (!res.ok) {
-        setErrorMessage(res.errors);
+      } else {
+        setErrorMessage(data.error);
       }
     } catch (error) {
-      setErrorMessage(error);
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -100,9 +100,9 @@ export default function SignIn() {
           </div>
           <div>
             {errorMessage && (
-              <Alert className="mt-5" color="failure">
+              <div className="mt-5" color="failure">
                 {errorMessage}
-              </Alert>
+              </div>
             )}
           </div>
         </div>
