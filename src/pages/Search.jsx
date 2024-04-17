@@ -41,7 +41,7 @@ function Search() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTerm = urlParams.get("searchTerm");
-    const sortOrder = urlParams.get("sortOrder");
+    const sortOrder = urlParams.get("sort");
     const category = urlParams.get("category");
     if (searchTerm || sortOrder || category) {
       setSearchQueryData({
@@ -81,7 +81,8 @@ function Search() {
     urlParams.set("sort", searchQueryData.sortOrder);
     urlParams.set("category", searchQueryData.category);
     const searchQuery = urlParams.toString();
-    navigate(`/search/${searchQuery}`);
+    console.log(searchQuery);
+    navigate(`/search?${searchQuery}`);
   };
 
   const handleShowMore = async () => {
