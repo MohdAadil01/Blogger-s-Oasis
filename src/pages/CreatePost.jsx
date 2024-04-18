@@ -15,6 +15,7 @@ import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
+import { uploadImage } from "../utils/uploadImage";
 
 function CreatePost() {
   const [formData, setFormData] = useState({
@@ -28,7 +29,6 @@ function CreatePost() {
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
-  const ref = useRef();
   const handleChange = (e) => {
     if (e.target.id === "title") {
       setFormData({ ...formData, title: e.target.value });
@@ -37,14 +37,29 @@ function CreatePost() {
       setFormData({ ...formData, category: e.target.value });
     }
   };
-  console.log(formData);
 
-  const handleSubmit = async (e) => {};
-  const uploadImageHandler = (e) => {};
+  const uploadImageHandler = async (e) => {
+    e.preventDefault();
+
+    const selectedFile = e.target.files[0];
+    if (selectedFile.size > 2000000) {
+      setErrorMessage("File size should be less than 2mb");
+    } else {
+      setFile(selectedFile);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const imageData = await uploadImage(file);
+    console.log(data);
+    console.log(formData);
+    console.log(file);
+  };
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
-      <form className="flex flex-col gap-4" onClick={handleSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -59,6 +74,7 @@ function CreatePost() {
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
+            value={formData.category}
           >
             <option value="uncategorized">Select a category</option>
             <option value="javascript">JavaScript</option>
@@ -67,7 +83,7 @@ function CreatePost() {
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
-          <TextInput type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <TextInput type="file" onChange={uploadImageHandler} />
         </div>
         <JoditEditor
           ref={editor}
